@@ -48,17 +48,24 @@ gulp.task('scripts-dist', function(done) {
 });
 
 gulp.task('lint', function () {
-	return gulp.src(['js/**/*.js'])
+	return gulp.src(['js/**/*.js', '!libs/**'])
 		// eslint() attaches the lint output to the eslint property
 		// of the file object so it can be used by other modules.
 		.pipe(eslint())
+        .pipe(eslint({
+            globals: [
+                'jQuery',
+                '$'
+            ]
+        }))
 		// eslint.format() outputs the lint results to the console.
 		// Alternatively use eslint.formatEach() (see Docs).
 		.pipe(eslint.format())
 		// To have the process exit with an error code (1) on
 		// lint error, return the stream and pipe to failOnError last.
-		.pipe(eslint.failOnError());
-});
+        .pipe(eslint.failOnError())
+})
+
 
 gulp.task('dist', gulp.parallel('copyHtml', 'styles', 'copy-images', 'lint', 'scripts-dist'));
 
@@ -67,7 +74,7 @@ gulp.task('default', gulp.parallel('copyHtml', 'styles', 'copy-images', 'lint', 
     gulp.watch('sass/**/*.scss', gulp.parallel('styles'));
     gulp.watch('js/**/*.js', gulp.parallel('scripts-dist'));
 	gulp.watch('js/**/*.js', gulp.parallel('lint'));
-	gulp.watch('/index.html', gulp.parallel('copyHtml'));
+	gulp.watch('index.html', gulp.parallel('copyHtml'));
 	gulp.watch('./dist/index.html').on('change', browserSync.reload);
 
 	browserSync.init({
