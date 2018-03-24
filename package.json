@@ -1,0 +1,28 @@
+{
+  "name": "search-app-api",
+  "version": "1.0.0",
+  "description": "A simple search for interesting page",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "search",
+    "page",
+    "looking",
+    "for",
+    "interesting"
+  ],
+  "author": "Armando JR",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.23.6",
+    "gulp": "^4.0.0",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^4.0.2",
+    "gulp-sass": "^3.2.1",
+    "gulp-uglify": "^3.0.0",
+    "gulp-uglify-es": "^1.0.1"
+  }
+}
