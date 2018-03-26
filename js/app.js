@@ -17,22 +17,6 @@
             .then(addImage)
             .catch(err => requestError(err, 'image'));
 
-        function addImage(images) {
-            let htmlResult = '';
-            if (images && images.results && images.results[0]) {
-                const imageData = images.results[0];
-
-                htmlResult = `
-                                <figure>
-                                    <img src="${imageData.urls.regular}" alt="${imageData.description}">
-                                    <figcaption>${imageData.description}<br> by <i>${imageData.user.name}</i><br> from <i>${imageData.user.location}</i></figcaption>
-                                </figure>`;
-            } else {
-                htmlResult = '<p class="network-warning">Unfortunately, no <i>image</i> was returned for your search.</p>';
-            }
-
-            responseContainer.insertAdjacentHTML('afterbegin', htmlResult);
-        }
         //Request related articles by NYT API
         fetch(`http://api.nytimes.com/svc/search/v2/articlesearch.json?q=${searchedForText}&api-key=5ed067b15e7c4deeb029547379606584`)
             .then(response => response.json())
@@ -59,6 +43,23 @@
                 htmlResult = '<p class="network-warning">Unfortunately, no <i>articles</i> was returned for your search.</p>';
             }
             responseContainer.insertAdjacentHTML('beforeend', htmlResult);
+        }
+
+        function addImage(images) {
+            let htmlResult = '';
+            if (images && images.results && images.results[0]) {
+                const imageData = images.results[0];
+
+                htmlResult = `
+                                <figure>
+                                    <img src="${imageData.urls.regular}" alt="${imageData.description}">
+                                    <figcaption>${imageData.description}<br> by <i>${imageData.user.name}</i><br> from <i>${imageData.user.location}</i></figcaption>
+                                </figure>`;
+            } else {
+                htmlResult = '<p class="network-warning">Unfortunately, no <i>image</i> was returned for your search.</p>';
+            }
+
+            responseContainer.insertAdjacentHTML('afterbegin', htmlResult);
         }
 
         function requestError(err, part) {
