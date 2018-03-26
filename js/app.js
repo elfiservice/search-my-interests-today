@@ -14,7 +14,10 @@
             headers: {
                 Authorization: 'Client-ID 795f815f9db950af216b40bc64a9bdfd4a5805d5387f88c8fa5d6a88a682aa31'
             }
-        }).done(addImage);
+        }).done(addImage)
+            .fail(function (error) {
+                requestError(error, 'image');
+            });
 
         function addImage(images) {
             let htmlResult = '';
@@ -26,14 +29,19 @@
                                     <img src="${imageData.urls.regular}" alt="${imageData.description}">
                                     <figcaption>${imageData.description}<br> by <i>${imageData.user.name}</i><br> from <i>${imageData.user.location}</i></figcaption>
                                 </figure>`;
-
-                responseContainer.insertAdjacentHTML('afterbegin', htmlResult);
+            } else {
+                htmlResult = '<p class="network-warning">Unfortunately, no <i>image</i> was returned for your search.</p>';
             }
+
+            responseContainer.insertAdjacentHTML('afterbegin', htmlResult);
         }
         //Request related articles by NYT API
         $.ajax({
             url: `http://api.nytimes.com/svc/search/v2/articlesearch.json?q=${searchedForText}&api-key=5ed067b15e7c4deeb029547379606584`,
-        }).done(addArticle);
+        }).done(addArticle)
+            .fail(function (error) {
+                requestError(error, 'articles');
+            });
 
         //if sucess
         function addArticle(articles) {
@@ -52,8 +60,15 @@
                     </div>
                     </li>`
                 ).join('') + '</ul>';
-                responseContainer.insertAdjacentHTML('beforeend', htmlResult);
+            } else {
+                htmlResult = '<p class="network-warning">Unfortunately, no <i>articles</i> was returned for your search.</p>';
             }
+            responseContainer.insertAdjacentHTML('beforeend', htmlResult);
+        }
+
+        function requestError(err, part) {
+            console.log(err);
+            responseContainer.insertAdjacentHTML('beforeend', `<p class="network-warning">Oh no! There was an error making a request for the ${part}.</p>`);
         }
     });
 })();
